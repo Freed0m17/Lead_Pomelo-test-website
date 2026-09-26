@@ -1,0 +1,655 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lead Pomelo — Owner conversations for search funds and small PE</title>
+  <meta name="description" content="Lead Pomelo finds business owners who might sell and opens conversations with them for search funds, independent sponsors and small PE firms.">
+  <link rel="icon" type="image/svg+xml" href="brand_assets/lead-pomelo-mark.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Figtree:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      /* Lead Pomelo brand colours (brand guidelines v1, Sept 2026) */
+      --paper: #F6F5EE;
+      --ink: #14261E;
+      --rind: #1F4A38;
+      --flesh: #B83A51;
+      --pith: #EEF1D8;
+      --flesh-soft: #FBE4E4;
+      --segment: #F3B3B0;
+      --zest: #D5E07A;
+      --ink-muted: #55635A;
+      --line: #C9CDBE;
+      /* Derived */
+      --rind-hover: #193D2E;
+      --rind-press: #133024;
+      --surface: #FFFFFF;
+      --panel: #FAF9F4;
+      --line-soft: #E2E4D8;
+      --spring: cubic-bezier(.34, 1.56, .64, 1);
+      --ease: cubic-bezier(.4, 0, .2, 1);
+    }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body { background: var(--paper); color: var(--ink); font-family: Figtree, Arial, sans-serif; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+    .serif { font-family: "Young Serif", Georgia, serif; font-weight: 400; }
+    .mono { font-family: "IBM Plex Mono", Menlo, monospace; font-weight: 500; letter-spacing: -0.01em; }
+    .h-display { font-family: "Young Serif", Georgia, serif; font-weight: 400; letter-spacing: -0.03em; line-height: 1.1; color: var(--ink); }
+    .label { font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-muted); }
+
+    /* Buttons */
+    .btn-primary { background: var(--rind); color: var(--pith); font-weight: 600; transition: background-color .2s var(--ease), transform .25s var(--spring); }
+    .btn-primary:hover { background: var(--rind-hover); }
+    .btn-primary:active { background: var(--rind-press); transform: scale(.98); }
+    .btn-primary:focus-visible, .focus-ring:focus-visible { outline: 3px solid rgba(31,74,56,.4); outline-offset: 3px; }
+    .btn-primary .chev { transition: transform .3s var(--spring); }
+    .btn-primary:hover .chev { transform: translateX(4px); }
+
+    .link-rind { color: var(--rind); font-weight: 600; text-decoration: underline; text-decoration-color: rgba(31,74,56,.3); text-underline-offset: 4px; transition: color .2s var(--ease), text-decoration-color .2s var(--ease); }
+    .link-rind:hover { color: var(--rind-hover); text-decoration-color: var(--rind); }
+    .link-rind:active { color: var(--rind-press); }
+    .link-rind:focus-visible { outline: 3px solid rgba(31,74,56,.4); outline-offset: 3px; border-radius: 4px; }
+    .link-rind .chev { transition: transform .3s var(--spring); display: inline-block; }
+    .link-rind:hover .chev { transform: translateX(4px); }
+
+    .press { transition: transform .25s var(--spring), background-color .2s var(--ease), opacity .2s var(--ease); }
+    .press:active { transform: scale(.97); }
+
+    /* Depth: base (paper) → elevated (white) → floating. Ink-tinted, low opacity */
+    .shadow-soft { box-shadow: 0 1px 2px rgba(20,38,30,.04), 0 8px 24px -10px rgba(20,38,30,.10), 0 24px 48px -28px rgba(20,38,30,.08); }
+    .shadow-header { box-shadow: 0 1px 0 rgba(20,38,30,.06), 0 6px 16px -10px rgba(20,38,30,.12); }
+    .shadow-rind { box-shadow: 0 2px 4px rgba(31,74,56,.14), 0 10px 24px -8px rgba(31,74,56,.35); }
+
+    /* Service cards */
+    .svc { transition: transform .3s var(--spring), background-color .2s var(--ease); }
+    .svc:hover { transform: translateY(-3px); background: #fff; }
+    .svc:active { transform: translateY(-1px) scale(.99); }
+    .svc .arr { transition: background-color .2s var(--ease), color .2s var(--ease); }
+    .svc:hover .arr { background: var(--rind); color: var(--pith); }
+    .svc:focus-visible { outline: 3px solid rgba(31,74,56,.4); outline-offset: 3px; }
+
+    /* Accordion */
+    details.acc > summary { list-style: none; cursor: pointer; }
+    details.acc > summary::-webkit-details-marker { display: none; }
+    details.acc > summary { transition: background-color .2s var(--ease); }
+    details.acc > summary:hover { background: #E6E9D0; }
+    details.acc > summary:active { background: #DDE1C4; }
+    details.acc > summary:focus-visible { outline: 3px solid rgba(31,74,56,.4); outline-offset: 2px; }
+    details.acc > summary .caret { transition: transform .35s var(--spring); }
+    details.acc[open] > summary .caret { transform: rotate(180deg); }
+    details.acc[open] > summary .ttl { color: var(--rind); }
+    details.acc .body { animation: accIn .35s var(--ease); }
+    @keyframes accIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+
+    .quote { position: relative; }
+    .quote::before { content: "\201C"; position: absolute; left: 6px; top: -34px; font-family: "Young Serif", Georgia, serif; font-size: 140px; line-height: 1; color: rgba(31,74,56,.09); font-style: normal; pointer-events: none; }
+
+    /* Calculator */
+    .field { background: #fff; border: 1px solid var(--line); border-radius: 8px; transition: border-color .2s var(--ease); }
+    .field:hover { border-color: #AEB3A0; }
+    .field:focus-within { border-color: var(--rind); box-shadow: 0 0 0 3px rgba(31,74,56,.14); }
+    .field select, .field input { background: transparent; outline: none; width: 100%; appearance: none; -webkit-appearance: none; }
+    input[type=range] { -webkit-appearance: none; appearance: none; height: 6px; border-radius: 4px; background: linear-gradient(to right, var(--rind) 0 var(--p, 25%), var(--line-soft) var(--p, 25%) 100%); cursor: pointer; }
+    input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 4px; background: var(--rind); border: 0; transition: transform .25s var(--spring); }
+    input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.2); }
+    input[type=range]:active::-webkit-slider-thumb { transform: scale(1.35); }
+    input[type=range]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 4px; background: var(--rind); border: 0; }
+    input[type=range]:focus-visible { outline: 3px solid rgba(31,74,56,.4); outline-offset: 4px; }
+
+    /* Horizontal scrollers */
+    .hscroll { scrollbar-width: none; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
+    .hscroll::-webkit-scrollbar { display: none; }
+    .hscroll > * { scroll-snap-align: start; }
+
+    .logo-card { transition: background-color .2s var(--ease), transform .3s var(--spring); }
+    .logo-card:hover { background: #fff; }
+    .logo-card:active { transform: scale(.98); }
+    .logo-card:focus-visible { outline: 3px solid rgba(31,74,56,.4); outline-offset: 2px; }
+
+    .case-link .circ { transition: background-color .2s var(--ease), color .2s var(--ease), transform .3s var(--spring); }
+    .case-link:hover .circ { background: var(--rind); color: var(--pith); transform: translateX(3px); }
+    .case-link:active .circ { transform: scale(.94); }
+    .case-link:focus-visible { outline: 3px solid rgba(31,74,56,.4); outline-offset: 4px; border-radius: 8px; }
+
+    .round-btn { transition: background-color .2s var(--ease), transform .25s var(--spring), opacity .2s var(--ease); }
+    .round-btn:hover:not(:disabled) { background: #fff; }
+    .round-btn:active:not(:disabled) { transform: scale(.94); }
+    .round-btn:disabled { opacity: .55; cursor: default; }
+    .round-btn:focus-visible { outline: 3px solid rgba(31,74,56,.4); outline-offset: 3px; }
+
+    .nav-link { transition: color .2s var(--ease); }
+    .nav-link:hover { color: var(--rind); }
+    .nav-link:active { color: var(--rind-press); }
+    .nav-link:focus-visible { outline: 2px solid rgba(31,74,56,.5); outline-offset: 3px; border-radius: 4px; }
+
+    .foot-link { transition: color .2s var(--ease); }
+    .foot-link:hover { color: #fff; }
+    .foot-link:active { color: var(--segment); }
+    .foot-link:focus-visible { outline: 2px solid rgba(238,241,216,.7); outline-offset: 3px; border-radius: 4px; }
+    .foot-link .chev { transition: transform .3s var(--spring); display: inline-block; }
+    .foot-link:hover .chev { transform: translateX(4px); }
+
+    /* Mobile menu */
+    #menu { transition: opacity .25s var(--ease), transform .35s var(--spring); }
+    #menu[data-open="false"] { opacity: 0; transform: translateY(-8px); pointer-events: none; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="sticky top-0 z-40 bg-white shadow-header">
+  <div class="mx-auto flex h-16 max-w-[1200px] items-center justify-between px-4">
+    <div class="flex items-center gap-4">
+      <button id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="menu" class="press focus-ring -ml-1 grid h-10 w-10 place-items-center rounded-lg text-[var(--ink-muted)] hover:bg-[var(--paper)] lg:hidden">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+      <a href="#" class="focus-ring block rounded-md" aria-label="Lead Pomelo home">
+        <img src="brand_assets/lead-pomelo-logo.svg" alt="Lead Pomelo" class="block h-8 w-auto">
+      </a>
+      <nav class="ml-8 hidden items-center gap-7 text-[15px] font-medium text-[var(--ink)] lg:flex" aria-label="Primary">
+        <a class="nav-link" href="#services">How it works</a>
+        <a class="nav-link" href="#why">Why us</a>
+        <a class="nav-link" href="#calculator">Estimate</a>
+        <a class="nav-link" href="#cases">Searches</a>
+        <a class="nav-link" href="#team">Team</a>
+      </nav>
+    </div>
+    <a href="#contact" class="btn-primary shadow-rind rounded-lg px-4 py-2.5 text-[16px] leading-none">Book a call</a>
+  </div>
+  <div id="menu" data-open="false" class="absolute inset-x-0 top-16 border-t border-[var(--line-soft)] bg-white px-4 pb-6 pt-2 shadow-header lg:hidden">
+    <nav class="flex flex-col text-[18px] font-semibold text-[var(--ink)]" aria-label="Mobile">
+      <a class="nav-link border-b border-[var(--line-soft)] py-3" href="#services">How it works</a>
+      <a class="nav-link border-b border-[var(--line-soft)] py-3" href="#why">Why us</a>
+      <a class="nav-link border-b border-[var(--line-soft)] py-3" href="#calculator">Estimate your search</a>
+      <a class="nav-link border-b border-[var(--line-soft)] py-3" href="#cases">Searches</a>
+      <a class="nav-link py-3" href="#team">Team</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- Hero -->
+  <section class="relative overflow-hidden">
+    <div aria-hidden="true" class="pointer-events-none absolute -right-[180px] top-[190px] h-[640px] w-[640px] rounded-full" style="background: radial-gradient(circle at 30% 30%, rgba(238,241,216,.9), rgba(238,241,216,.35) 55%, rgba(238,241,216,0) 72%), radial-gradient(circle, rgba(255,255,255,.35) 0 60%, transparent 61%);"></div>
+    <div class="relative mx-auto max-w-[760px] px-4 pb-10 pt-16 text-center">
+      <p class="label">Owner outreach for search funds and small PE</p>
+      <h1 class="h-display mx-auto mt-4 text-[44px] sm:text-[56px] lg:text-[64px]">Talk to owners who might sell</h1>
+      <p class="mx-auto mt-5 max-w-[600px] text-[16px] leading-[1.7] text-[var(--ink)]">
+        We map every company in your buy box, find the owner and write to them from your own name and domain. Searchers we work with see <b class="font-semibold text-[var(--flesh)]">3–5 qualified owner conversations a month</b>, each one checked against your criteria before it reaches your calendar.
+      </p>
+      <a href="#contact" class="btn-primary shadow-rind mt-8 flex h-14 w-full items-center justify-between rounded-lg px-6 text-[19px] sm:mx-auto sm:max-w-[420px]">
+        Talk through your buy box
+        <svg class="chev" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
+      </a>
+      <p class="mt-6 text-[15px] text-[var(--ink-muted)]">A 30-minute call with a search lead, not a salesperson</p>
+      <p class="mx-auto mt-12 max-w-[320px] text-[16px] font-semibold leading-[1.5] text-[var(--ink-muted)] sm:max-w-none">Search funds, independent sponsors and small PE firms use Lead Pomelo</p>
+    </div>
+
+    <!-- Logo strip -->
+    <div class="hscroll relative flex gap-2 overflow-x-auto scroll-px-4 px-4 pb-4 lg:justify-center">
+      <a href="#cases" class="logo-card relative grid h-16 w-[168px] shrink-0 place-items-center rounded-lg border border-[var(--line-soft)] bg-[var(--panel)]"><img src="https://placehold.co/120x32/FAF9F4/55635A?text=Fund+A" alt="Fund A logo" class="h-8"><svg class="absolute right-2 top-2 text-[var(--ink-muted)]" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+      <a href="#cases" class="logo-card grid h-16 w-[168px] shrink-0 place-items-center rounded-lg border border-[var(--line-soft)] bg-[var(--panel)]"><img src="https://placehold.co/120x32/FAF9F4/55635A?text=Fund+B" alt="Fund B logo" class="h-8"></a>
+      <a href="#cases" class="logo-card grid h-16 w-[168px] shrink-0 place-items-center rounded-lg border border-[var(--line-soft)] bg-[var(--panel)]"><img src="https://placehold.co/120x32/FAF9F4/55635A?text=Sponsor+C" alt="Sponsor C logo" class="h-8"></a>
+      <a href="#cases" class="logo-card grid h-16 w-[168px] shrink-0 place-items-center rounded-lg border border-[var(--line-soft)] bg-[var(--panel)]"><img src="https://placehold.co/120x32/FAF9F4/55635A?text=Partners+D" alt="Partners D logo" class="h-8"></a>
+      <a href="#cases" class="logo-card grid h-16 w-[168px] shrink-0 place-items-center rounded-lg border border-[var(--line-soft)] bg-[var(--panel)]"><img src="https://placehold.co/120x32/FAF9F4/55635A?text=Capital+E" alt="Capital E logo" class="h-8"></a>
+      <a href="#cases" class="logo-card grid h-16 w-[168px] shrink-0 place-items-center rounded-lg border border-[var(--line-soft)] bg-[var(--panel)]"><img src="https://placehold.co/120x32/FAF9F4/55635A?text=Search+F" alt="Search F logo" class="h-8"></a>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section id="services" class="mx-auto mt-14 max-w-[1200px] px-4">
+    <div class="overflow-hidden rounded-lg border border-[var(--line-soft)] bg-white shadow-soft">
+      <div class="px-6 pt-8 lg:px-12 lg:pt-12">
+        <h2 class="h-display max-w-[640px] text-[36px] leading-[1.1] lg:text-[48px]">You run the search. We find the owners.</h2>
+        <p class="mt-4 max-w-[640px] text-[16px] leading-[1.7] text-[var(--ink)] lg:text-[18px]">Most owners of good small businesses have never spoken to a broker. We build the full list of companies that fit your thesis, research who owns each one, and write to them in plain language from your own inbox. Replies come to you, and we keep the list, the notes and every reply on record.</p>
+
+        <div class="mt-8 grid gap-6 pb-6 lg:grid-cols-3">
+          <a href="#contact" class="svc relative block rounded-lg border border-[var(--line-soft)] bg-[var(--panel)] p-5">
+            <span class="grid h-10 w-10 place-items-center rounded-lg border border-[var(--line-soft)] bg-white text-[var(--rind)]">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.1 5.1 9.9 3 3 5.7v15.3l6.9-2.7 4.2 2.1 6.9-2.7V2.4Z"/><path d="M9.9 3v15.3M14.1 5.1v15.3"/></svg>
+            </span>
+            <span class="arr absolute right-3 top-3 grid h-6 w-6 place-items-center rounded bg-[var(--line-soft)] text-[var(--ink-muted)]"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+            <h3 class="mt-6 text-[18px] font-semibold text-[var(--ink)]">Buy box mapping</h3>
+            <p class="mt-2 text-[15px] leading-[1.6] text-[var(--ink)]">Every company that fits your industry, region and size, from state registries and company websites.</p>
+            <span class="mono mt-4 inline-block rounded bg-[var(--pith)] px-3 py-1.5 text-[13px] text-[var(--ink)]">212 companies · one recent search</span>
+          </a>
+          <a href="#contact" class="svc relative block rounded-lg border border-[var(--line-soft)] bg-[var(--panel)] p-5">
+            <span class="grid h-10 w-10 place-items-center rounded-lg border border-[var(--line-soft)] bg-white text-[var(--rind)]">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="7" r="4"/><path d="M2 21v-2a4 4 0 0 1 4-4h4.5"/><circle cx="17" cy="17" r="3"/><path d="m21 21-1.9-1.9"/></svg>
+            </span>
+            <span class="arr absolute right-3 top-3 grid h-6 w-6 place-items-center rounded bg-[var(--line-soft)] text-[var(--ink-muted)]"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+            <h3 class="mt-6 text-[18px] font-semibold text-[var(--ink)]">Owner research</h3>
+            <p class="mt-2 text-[15px] leading-[1.6] text-[var(--ink)]">We name the owner of each company, with their tenure, likely age and any sign they are thinking about what comes next.</p>
+            <span class="mono mt-4 inline-block rounded bg-[var(--pith)] px-3 py-1.5 text-[13px] text-[var(--ink)]">38 owners aged 60+ in that list</span>
+          </a>
+          <a href="#contact" class="svc relative block rounded-lg border border-[var(--line-soft)] bg-[var(--panel)] p-5">
+            <span class="grid h-10 w-10 place-items-center rounded-lg border border-[var(--line-soft)] bg-white text-[var(--rind)]">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 8 8 5 8-5"/></svg>
+            </span>
+            <span class="arr absolute right-3 top-3 grid h-6 w-6 place-items-center rounded bg-[var(--line-soft)] text-[var(--ink-muted)]"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+            <h3 class="mt-6 text-[18px] font-semibold text-[var(--ink)]">Letters from your inbox</h3>
+            <p class="mt-2 text-[15px] leading-[1.6] text-[var(--ink)]">Short, plain notes sent from your domain and signed by you. Owners reply to you, not to us.</p>
+            <span class="mono mt-4 inline-block rounded bg-[var(--pith)] px-3 py-1.5 text-[13px] text-[var(--ink)]">2.3% reply rate · Sept 2026</span>
+          </a>
+        </div>
+      </div>
+      <div class="border-t border-[var(--line-soft)] bg-[var(--pith)] px-6 pb-6 pt-8 lg:flex lg:items-center lg:justify-between lg:px-12">
+        <p class="max-w-[340px] text-[17px] leading-[1.5] text-[var(--ink)] lg:max-w-none">See how many companies fit your buy box before you commit</p>
+        <a href="#contact" class="btn-primary shadow-rind mt-7 flex h-12 items-center justify-between rounded-lg px-5 text-[17px] lg:mt-0 lg:w-[340px]">
+          Count my buy box
+          <svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why choose -->
+  <section id="why" class="mx-auto mt-14 max-w-[1200px] px-4">
+    <div class="relative overflow-hidden rounded-lg border border-[var(--line-soft)] bg-[var(--panel)] px-4 pb-8 pt-9 shadow-soft lg:px-12 lg:pt-14">
+      <h2 class="h-display relative mx-auto max-w-[340px] text-center text-[28px] leading-[1.2] lg:max-w-[600px] lg:text-[40px]">How Lead Pomelo works differently</h2>
+
+      <div class="relative mx-auto mt-8 max-w-[860px] space-y-2">
+        <details class="acc" open>
+          <summary class="flex items-center justify-between gap-4 rounded-lg bg-[var(--pith)] px-4 py-3.5">
+            <span class="ttl max-w-[260px] text-[17px] font-semibold leading-[1.4] text-[var(--ink)] sm:max-w-none">We count conversations, not emails sent</span>
+            <svg class="caret shrink-0 text-[var(--rind)]" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="body px-3 pb-4 pt-5">
+            <h4 class="label">Problem</h4>
+            <p class="quote mt-2 text-[16px] italic leading-[1.75] text-[var(--ink)]">Our last provider sent thousands of emails a month and reported open rates. Most replies came from brokers, and a few owners were annoyed we had written at all. None of it turned into a real conversation about their business.</p>
+            <p class="mt-3 text-right text-[14px] font-semibold text-[var(--ink)]">Search fund principal</p>
+            <p class="text-right text-[13px] text-[var(--ink-muted)]">Industrial services thesis</p>
+
+            <h4 class="label mt-6">Solution</h4>
+            <p class="quote mt-2 text-[16px] italic leading-[1.75] text-[var(--ink)]">We report one number: owners who agreed to talk to you. Each one is checked against your buy box before we pass it on, and you see the reply thread in full. If an owner doesn’t fit your criteria, they don’t count.</p>
+            <div class="mt-3 flex items-center justify-end gap-4">
+              <div class="text-right">
+                <p class="text-[14px] font-semibold text-[var(--ink)]">Jordan</p>
+                <p class="text-[13px] text-[var(--ink-muted)]">Search lead, Lead Pomelo</p>
+              </div>
+              <img src="https://placehold.co/80x80/EEF1D8/55635A?text=J" alt="Jordan, search lead" class="h-10 w-10 rounded-lg">
+            </div>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary class="flex items-center justify-between gap-4 rounded-lg bg-[var(--pith)] px-4 py-3.5">
+            <span class="ttl max-w-[260px] text-[17px] font-semibold leading-[1.4] text-[var(--ink)] sm:max-w-none">We never write to one owner for two buyers</span>
+            <svg class="caret shrink-0 text-[var(--ink)]" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="body px-3 pb-3 pt-4 text-[16px] leading-[1.7] text-[var(--ink)]">Once an owner is on your list, they stay yours. We check every new list against every active search, so an owner never hears from two of our clients.</div>
+        </details>
+        <details class="acc">
+          <summary class="flex items-center justify-between gap-4 rounded-lg bg-[var(--pith)] px-4 py-3.5">
+            <span class="ttl max-w-[260px] text-[17px] font-semibold leading-[1.4] text-[var(--ink)] sm:max-w-none">Every message goes out in your name</span>
+            <svg class="caret shrink-0 text-[var(--ink)]" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="body px-3 pb-3 pt-4 text-[16px] leading-[1.7] text-[var(--ink)]">Emails are sent from your domain and signed by you, in your voice. Lead Pomelo never appears in them, and owners deal with you from the first line.</div>
+        </details>
+        <details class="acc">
+          <summary class="flex items-center justify-between gap-4 rounded-lg bg-[var(--pith)] px-4 py-3.5">
+            <span class="ttl max-w-[260px] text-[17px] font-semibold leading-[1.4] text-[var(--ink)] sm:max-w-none">Lists built by software, checked by people</span>
+            <svg class="caret shrink-0 text-[var(--ink)]" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="body px-3 pb-3 pt-4 text-[16px] leading-[1.7] text-[var(--ink)]">Automated tools find companies and filings; a researcher confirms the owner, the address and the fit before a single note goes out.</div>
+        </details>
+        <details class="acc">
+          <summary class="flex items-center justify-between gap-4 rounded-lg bg-[var(--pith)] px-4 py-3.5">
+            <span class="ttl max-w-[260px] text-[17px] font-semibold leading-[1.4] text-[var(--ink)] sm:max-w-none">First notes out within three weeks</span>
+            <svg class="caret shrink-0 text-[var(--ink)]" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="body px-3 pb-3 pt-4 text-[16px] leading-[1.7] text-[var(--ink)]">Week one we agree the buy box, week two we build and check the list, week three the first notes go out from your inbox.</div>
+        </details>
+        <details class="acc">
+          <summary class="flex items-center justify-between gap-4 rounded-lg bg-[var(--pith)] px-4 py-3.5">
+            <span class="ttl max-w-[260px] text-[17px] font-semibold leading-[1.4] text-[var(--ink)] sm:max-w-none">Data and sending costs included</span>
+            <svg class="caret shrink-0 text-[var(--ink)]" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="body px-3 pb-3 pt-4 text-[16px] leading-[1.7] text-[var(--ink)]">Registry data, contact lookups and sending inboxes are part of the monthly fee. You won’t get a separate invoice for any of them.</div>
+        </details>
+        <details class="acc">
+          <summary class="flex items-center justify-between gap-4 rounded-lg bg-[var(--pith)] px-4 py-3.5">
+            <span class="ttl max-w-[260px] text-[17px] font-semibold leading-[1.4] text-[var(--ink)] sm:max-w-none">A monthly report you could send to investors</span>
+            <svg class="caret shrink-0 text-[var(--ink)]" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="body px-3 pb-3 pt-4 text-[16px] leading-[1.7] text-[var(--ink)]">Companies mapped, owners contacted, replies and conversations, each with its source and date. We review it with you every month and narrow the buy box when the numbers say so.</div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- Estimate calculator -->
+  <section id="calculator" class="mx-auto mt-14 max-w-[1200px] px-4">
+    <div class="relative rounded-lg border border-[var(--line-soft)] bg-white px-4 pb-8 pt-7 shadow-soft lg:px-12 lg:pt-12">
+      <h2 class="h-display max-w-[320px] text-[40px] leading-[1.05] sm:max-w-none lg:text-[52px]">Measured in owner conversations</h2>
+      <p class="mt-4 max-w-[640px] text-[16px] leading-[1.7] text-[var(--ink)] lg:text-[18px]">Enter your search to estimate how many owners you could be talking to.</p>
+
+      <div class="mt-9 grid gap-6 lg:grid-cols-[1.2fr_1fr] lg:items-start">
+        <div class="relative">
+          <img src="brand_assets/lead-pomelo-mark.svg" alt="" aria-hidden="true" class="absolute -right-3 -top-3 z-10 h-10 w-10">
+          <form id="calc" class="relative space-y-4 rounded-lg border border-[var(--line-soft)] bg-[var(--panel)] p-4 shadow-soft" onsubmit="return false">
+            <label class="field relative block px-4 py-3">
+              <span class="flex items-center gap-2 text-[13px] text-[var(--ink-muted)]">Target industry <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></span>
+              <select id="industry" class="mt-1 cursor-pointer pr-8 text-[16px] text-[var(--ink)]">
+                <option value="1100">Home and trade services</option>
+                <option value="1250">Industrial services</option>
+                <option value="1300">Distribution</option>
+                <option value="1450">B2B software and IT</option>
+                <option value="1400">Healthcare services</option>
+              </select>
+              <svg class="pointer-events-none absolute right-5 top-1/2 -translate-y-1/2 text-[var(--ink)]" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+            </label>
+            <label class="field relative block px-4 py-3">
+              <span class="flex items-center gap-2 text-[13px] text-[var(--ink-muted)]">Companies in your buy box <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></span>
+              <select id="companies" class="mt-1 cursor-pointer pr-8 text-[16px] text-[var(--ink)]">
+                <option value="150">Around 150</option>
+                <option value="300" selected>Around 300</option>
+                <option value="600">Around 600</option>
+                <option value="1200">1,000 or more</option>
+              </select>
+              <svg class="pointer-events-none absolute right-5 top-1/2 -translate-y-1/2 text-[var(--ink)]" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+            </label>
+            <label class="field relative block px-4 py-3">
+              <span class="flex items-center gap-2 text-[13px] text-[var(--ink-muted)]">Months of outreach <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></span>
+              <select id="months" class="mt-1 cursor-pointer pr-8 text-[16px] text-[var(--ink)]">
+                <option value="3">3 months</option>
+                <option value="6" selected>6 months</option>
+                <option value="12">12 months</option>
+              </select>
+              <svg class="pointer-events-none absolute right-5 top-1/2 -translate-y-1/2 text-[var(--ink)]" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+            </label>
+            <label class="field block px-4 pb-4 pt-3">
+              <span class="flex items-center gap-2 text-[13px] text-[var(--ink-muted)]">Conversations that reach an LOI (%) <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></span>
+              <span id="rateOut" class="mono mt-1 block text-[16px] text-[var(--ink)]">8 %</span>
+              <input id="rate" type="range" min="1" max="30" value="8" class="mt-2 w-full" aria-label="Conversations that reach an LOI">
+            </label>
+            <label class="field block px-4 py-3">
+              <span class="flex items-center gap-2 text-[13px] text-[var(--ink-muted)]">Monthly budget (USD) <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></span>
+              <input id="budget" inputmode="numeric" value="4,500" class="mono mt-1 text-[16px] text-[var(--ink)]">
+            </label>
+          </form>
+        </div>
+
+        <div>
+          <div class="grid grid-cols-2 overflow-hidden rounded-lg border border-[var(--line-soft)] bg-[var(--pith)] shadow-soft">
+            <div class="border-b border-r border-[var(--line)] px-4 pb-5 pt-5">
+              <p class="text-[13px] font-medium text-[var(--ink-muted)]">Owner conversations</p>
+              <p id="oConv" class="mono mt-3 text-[30px] text-[var(--rind)]">—</p>
+            </div>
+            <div class="border-b border-[var(--line)] px-4 pb-5 pt-5">
+              <p class="text-[13px] font-medium text-[var(--ink-muted)]">Per month</p>
+              <p id="oMonth" class="mono mt-3 text-[30px] text-[var(--ink)]">—</p>
+            </div>
+            <div class="border-r border-[var(--line)] px-4 pb-5 pt-5">
+              <p class="text-[13px] font-medium text-[var(--ink-muted)]">Likely LOIs</p>
+              <p id="oLoi" class="mono mt-3 text-[30px] text-[var(--rind)]">—</p>
+            </div>
+            <div class="px-4 pb-5 pt-5">
+              <p class="text-[13px] font-medium text-[var(--ink-muted)]">Cost per conversation</p>
+              <p id="oCost" class="mono mt-3 text-[30px] text-[var(--ink)]">—</p>
+            </div>
+          </div>
+          <p class="mt-6 text-[16px] leading-[1.6] text-[var(--ink)]">Want the estimate built on your actual buy box?</p>
+          <a href="#contact" class="link-rind mt-3 inline-flex items-center gap-2 text-[17px]">Get a buy box count <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg></a>
+          <p class="mt-4 text-[12px] leading-[1.5] text-[var(--ink-muted)]">Estimate only. Based on average cost per owner conversation by industry across Lead Pomelo searches, January–September 2026. Assumes we reach at most 10% of a buy box as conversations.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Case studies -->
+  <section id="cases" class="mx-auto mt-16 max-w-[1200px]">
+    <div class="px-4">
+      <h2 class="h-display max-w-[320px] text-[40px] leading-[1.1] sm:max-w-none lg:text-[52px]">Recent searches, in numbers</h2>
+      <p class="mt-4 max-w-[600px] text-[16px] leading-[1.7] text-[var(--ink-muted)] lg:text-[18px]">What searchers and small funds found in their buy box, and how many owners agreed to talk.</p>
+    </div>
+    <div id="caseTrack" class="hscroll mt-8 flex gap-6 overflow-x-auto scroll-px-4 px-4 pb-6">
+      <article class="w-[310px] shrink-0 overflow-hidden rounded-lg border border-[var(--line-soft)] bg-white shadow-soft">
+        <div class="px-6 pt-6">
+          <img src="https://placehold.co/156x30/FFFFFF/1F4A38?text=Harbor+Search" alt="Harbor Search logo" class="h-[30px]">
+          <h3 class="mt-4 text-[16px] font-semibold leading-[1.5] text-[var(--ink)]">A first-time searcher mapped HVAC service companies in Texas and signed an LOI in month five</h3>
+        </div>
+        <div class="mt-6 grid grid-cols-2 border-y border-[var(--line-soft)] bg-[var(--panel)]">
+          <div class="border-r border-[var(--line-soft)] p-4"><p class="mono text-[22px] text-[var(--rind)]">212</p><p class="mt-2 text-[13px] leading-[1.3] text-[var(--ink-muted)]">Companies in the buy box</p></div>
+          <div class="p-4"><p class="mono text-[22px] text-[var(--rind)]">14</p><p class="mt-2 text-[13px] leading-[1.3] text-[var(--ink-muted)]">Owner conversations</p></div>
+        </div>
+        <a href="#contact" class="case-link flex items-center gap-5 px-6 py-6 text-[16px] font-semibold text-[var(--ink)]"><span class="circ grid h-12 w-12 place-items-center rounded-lg border border-[var(--line)] text-[var(--rind)]"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>Read the search</a>
+      </article>
+      <article class="w-[310px] shrink-0 overflow-hidden rounded-lg border border-[var(--line-soft)] bg-white shadow-soft">
+        <div class="px-6 pt-6">
+          <img src="https://placehold.co/156x30/FFFFFF/1F4A38?text=Ridgeline+Cap" alt="Ridgeline Capital logo" class="h-[30px]">
+          <h3 class="mt-4 text-[16px] font-semibold leading-[1.5] text-[var(--ink)]">An independent sponsor reached owners of specialty food distributors who had never spoken to a broker</h3>
+        </div>
+        <div class="mt-6 grid grid-cols-2 border-y border-[var(--line-soft)] bg-[var(--panel)]">
+          <div class="border-r border-[var(--line-soft)] p-4"><p class="mono text-[22px] text-[var(--rind)]">31</p><p class="mt-2 text-[13px] leading-[1.3] text-[var(--ink-muted)]">Owner conversations in 9 months</p></div>
+          <div class="p-4"><p class="mono text-[22px] text-[var(--rind)]">2</p><p class="mt-2 text-[13px] leading-[1.3] text-[var(--ink-muted)]">LOIs signed</p></div>
+        </div>
+        <a href="#contact" class="case-link flex items-center gap-5 px-6 py-6 text-[16px] font-semibold text-[var(--ink)]"><span class="circ grid h-12 w-12 place-items-center rounded-lg border border-[var(--line)] text-[var(--rind)]"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>Read the search</a>
+      </article>
+      <article class="w-[310px] shrink-0 overflow-hidden rounded-lg border border-[var(--line-soft)] bg-white shadow-soft">
+        <div class="px-6 pt-6">
+          <img src="https://placehold.co/156x30/FFFFFF/1F4A38?text=Fieldstone+PE" alt="Fieldstone PE logo" class="h-[30px]">
+          <h3 class="mt-4 text-[16px] font-semibold leading-[1.5] text-[var(--ink)]">A small PE firm added owner outreach to find add-ons for a landscaping platform</h3>
+        </div>
+        <div class="mt-6 grid grid-cols-2 border-y border-[var(--line-soft)] bg-[var(--panel)]">
+          <div class="border-r border-[var(--line-soft)] p-4"><p class="mono text-[22px] text-[var(--rind)]">4.1</p><p class="mt-2 text-[13px] leading-[1.3] text-[var(--ink-muted)]">Conversations a month</p></div>
+          <div class="p-4"><p class="mono text-[22px] text-[var(--rind)]">2.6%</p><p class="mt-2 text-[13px] leading-[1.3] text-[var(--ink-muted)]">Reply rate</p></div>
+        </div>
+        <a href="#contact" class="case-link flex items-center gap-5 px-6 py-6 text-[16px] font-semibold text-[var(--ink)]"><span class="circ grid h-12 w-12 place-items-center rounded-lg border border-[var(--line)] text-[var(--rind)]"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>Read the search</a>
+      </article>
+      <article class="w-[310px] shrink-0 overflow-hidden rounded-lg border border-[var(--line-soft)] bg-white shadow-soft">
+        <div class="px-6 pt-6">
+          <img src="https://placehold.co/156x30/FFFFFF/1F4A38?text=Northgate+Fund" alt="Northgate Fund logo" class="h-[30px]">
+          <h3 class="mt-4 text-[16px] font-semibold leading-[1.5] text-[var(--ink)]">A search fund narrowed a broad thesis to one region after three months of replies</h3>
+        </div>
+        <div class="mt-6 grid grid-cols-2 border-y border-[var(--line-soft)] bg-[var(--panel)]">
+          <div class="border-r border-[var(--line-soft)] p-4"><p class="mono text-[22px] text-[var(--rind)]">480</p><p class="mt-2 text-[13px] leading-[1.3] text-[var(--ink-muted)]">Owners contacted</p></div>
+          <div class="p-4"><p class="mono text-[22px] text-[var(--rind)]">11</p><p class="mt-2 text-[13px] leading-[1.3] text-[var(--ink-muted)]">Replied in month one</p></div>
+        </div>
+        <a href="#contact" class="case-link flex items-center gap-5 px-6 py-6 text-[16px] font-semibold text-[var(--ink)]"><span class="circ grid h-12 w-12 place-items-center rounded-lg border border-[var(--line)] text-[var(--rind)]"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>Read the search</a>
+      </article>
+    </div>
+    <div class="px-4">
+      <a href="#contact" class="press focus-ring grid h-12 place-items-center rounded-lg border border-[var(--line-soft)] bg-white text-[16px] font-semibold text-[var(--ink)] shadow-soft hover:bg-[var(--panel)] lg:max-w-[360px]">See all searches</a>
+      <div class="mt-8 flex gap-4">
+        <button id="casePrev" class="round-btn grid h-14 w-14 place-items-center rounded-lg border border-[var(--line-soft)] bg-[var(--line-soft)] text-[var(--ink-muted)]" aria-label="Previous search" disabled><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="m15 6-6 6 6 6"/></svg></button>
+        <button id="caseNext" class="round-btn grid h-14 w-14 place-items-center rounded-lg border border-[var(--line-soft)] bg-[var(--panel)] text-[var(--ink)]" aria-label="Next search"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reviews & awards -->
+  <section class="mx-auto mt-16 max-w-[1200px] px-4">
+    <h2 class="h-display max-w-[340px] text-[40px] leading-[1.1] sm:max-w-[620px] lg:text-[52px]">Reviewed by the searchers we work with</h2>
+    <p class="mt-4 max-w-[600px] text-[16px] leading-[1.7] text-[var(--ink-muted)] lg:text-[18px]">Read what searchers and fund partners say about working with Lead Pomelo.</p>
+    <div class="mt-8 flex flex-wrap gap-x-6 gap-y-4">
+      <a href="#" class="focus-ring group flex items-center gap-3 rounded-lg">
+        <span class="grid h-10 w-10 place-items-center rounded-lg border border-[var(--ink)] bg-white"><span class="mono text-[14px] text-[var(--ink)]">R1</span></span>
+        <span class="text-[15px] leading-[1.5]"><b class="font-semibold text-[var(--ink)] group-hover:text-[var(--rind)]">Site A</b> <span class="mono text-[var(--ink)]">/ 4.9</span><br><span class="text-[var(--ink-muted)]">42 reviews</span></span>
+      </a>
+      <a href="#" class="focus-ring group flex items-center gap-3 rounded-lg">
+        <span class="grid h-10 w-10 place-items-center rounded-lg border border-[var(--rind)] bg-white"><span class="mono text-[14px] text-[var(--rind)]">R2</span></span>
+        <span class="text-[15px] leading-[1.5]"><b class="font-semibold text-[var(--ink)] group-hover:text-[var(--rind)]">Site B</b> <span class="mono text-[var(--ink)]">/ 4.8</span><br><span class="text-[var(--ink-muted)]">19 reviews</span></span>
+      </a>
+    </div>
+    <div class="mt-9 grid grid-cols-3 gap-2 lg:grid-cols-6">
+      <div class="aspect-square rounded-lg border border-[var(--line-soft)] bg-[var(--panel)] p-2"><svg viewBox="0 0 100 100" class="h-full w-full" role="img" aria-label="ETA list 2026"><path d="M20 12h60v42c0 16-14 26-30 34-16-8-30-18-30-34Z" fill="#fff" stroke="#14261E" stroke-width="2"/><path d="M20 12h60v14H20Z" fill="#1F4A38"/><text x="50" y="23" text-anchor="middle" font-family="Figtree" font-size="8" font-weight="600" fill="#EEF1D8">ETA LIST</text><text x="50" y="46" text-anchor="middle" font-family="Figtree" font-size="9" font-weight="600" fill="#14261E">Sourcing</text><text x="50" y="64" text-anchor="middle" font-family="IBM Plex Mono" font-size="12" font-weight="500" fill="#1F4A38">2026</text></svg></div>
+      <div class="aspect-square rounded-lg border border-[var(--line-soft)] bg-[var(--panel)] p-2"><svg viewBox="0 0 100 100" class="h-full w-full" role="img" aria-label="Searcher choice 2026"><path d="M28 14h44v58L50 86 28 72Z" fill="#1F4A38"/><path d="M14 44h72l-6 7 6 7H14l6-7Z" fill="#14261E"/><text x="50" y="54" text-anchor="middle" font-family="Figtree" font-size="7.5" font-weight="600" fill="#EEF1D8">SEARCHERS</text><text x="50" y="32" text-anchor="middle" font-family="Figtree" font-size="7" font-weight="600" fill="#EEF1D8">★★★★★</text><text x="50" y="72" text-anchor="middle" font-family="IBM Plex Mono" font-size="8" font-weight="500" fill="#EEF1D8">2026</text></svg></div>
+      <div class="aspect-square rounded-lg border border-[var(--line-soft)] bg-[var(--panel)] p-2"><svg viewBox="0 0 100 100" class="h-full w-full" role="img" aria-label="Deal sourcing finalist"><g fill="none" stroke="#C9CDBE" stroke-width="3" stroke-linecap="round"><path d="M30 80C14 68 12 44 24 26"/><path d="M70 80C86 68 88 44 76 26"/></g><g fill="#C9CDBE"><ellipse cx="19" cy="60" rx="6" ry="3" transform="rotate(-50 19 60)"/><ellipse cx="17" cy="46" rx="6" ry="3" transform="rotate(-80 17 46)"/><ellipse cx="21" cy="33" rx="6" ry="3" transform="rotate(-110 21 33)"/><ellipse cx="81" cy="60" rx="6" ry="3" transform="rotate(50 81 60)"/><ellipse cx="83" cy="46" rx="6" ry="3" transform="rotate(80 83 46)"/><ellipse cx="79" cy="33" rx="6" ry="3" transform="rotate(110 79 33)"/></g><circle cx="50" cy="50" r="22" fill="#fff" stroke="#1F4A38" stroke-width="2"/><text x="50" y="47" text-anchor="middle" font-family="Figtree" font-size="6" font-weight="600" fill="#14261E">SOURCING</text><text x="50" y="59" text-anchor="middle" font-family="Figtree" font-size="7.5" font-weight="600" fill="#1F4A38">FINALIST</text></svg></div>
+      <div class="aspect-square rounded-lg border border-[var(--line-soft)] bg-[var(--panel)] p-2"><svg viewBox="0 0 100 100" class="h-full w-full" role="img" aria-label="Top rated 2025"><g fill="none" stroke="#C9CDBE" stroke-width="3" stroke-linecap="round"><path d="M30 80C14 68 12 44 24 26"/><path d="M70 80C86 68 88 44 76 26"/></g><g fill="#C9CDBE"><ellipse cx="19" cy="60" rx="6" ry="3" transform="rotate(-50 19 60)"/><ellipse cx="17" cy="46" rx="6" ry="3" transform="rotate(-80 17 46)"/><ellipse cx="21" cy="33" rx="6" ry="3" transform="rotate(-110 21 33)"/><ellipse cx="81" cy="60" rx="6" ry="3" transform="rotate(50 81 60)"/><ellipse cx="83" cy="46" rx="6" ry="3" transform="rotate(80 83 46)"/><ellipse cx="79" cy="33" rx="6" ry="3" transform="rotate(110 79 33)"/></g><circle cx="50" cy="50" r="22" fill="#fff" stroke="#1F4A38" stroke-width="2"/><text x="50" y="47" text-anchor="middle" font-family="Figtree" font-size="5.5" font-weight="600" fill="#14261E">TOP RATED</text><text x="50" y="59" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" font-weight="500" fill="#1F4A38">2025</text></svg></div>
+      <div class="aspect-square rounded-lg border border-[var(--line-soft)] bg-[var(--panel)] p-2"><svg viewBox="0 0 100 100" class="h-full w-full" role="img" aria-label="Lower middle market 2025"><path d="M28 14h44v58L50 86 28 72Z" fill="#1F4A38"/><path d="M14 44h72l-6 7 6 7H14l6-7Z" fill="#14261E"/><text x="50" y="54" text-anchor="middle" font-family="Figtree" font-size="8" font-weight="600" fill="#EEF1D8">LMM</text><text x="50" y="32" text-anchor="middle" font-family="Figtree" font-size="7" font-weight="600" fill="#EEF1D8">★★★★★</text><text x="50" y="72" text-anchor="middle" font-family="IBM Plex Mono" font-size="8" font-weight="500" fill="#EEF1D8">2025</text></svg></div>
+      <div class="aspect-square rounded-lg border border-[var(--line-soft)] bg-[var(--panel)] p-2"><svg viewBox="0 0 100 100" class="h-full w-full" role="img" aria-label="Search fund partners 2025"><path d="M20 12h60v42c0 16-14 26-30 34-16-8-30-18-30-34Z" fill="#fff" stroke="#14261E" stroke-width="2"/><path d="M20 12h60v14H20Z" fill="#1F4A38"/><text x="50" y="23" text-anchor="middle" font-family="Figtree" font-size="8" font-weight="600" fill="#EEF1D8">PARTNERS</text><text x="50" y="46" text-anchor="middle" font-family="Figtree" font-size="9" font-weight="600" fill="#14261E">Search funds</text><text x="50" y="64" text-anchor="middle" font-family="IBM Plex Mono" font-size="12" font-weight="500" fill="#1F4A38">2025</text></svg></div>
+    </div>
+    <a href="#" class="link-rind mt-9 inline-flex items-center gap-2 text-[16px]">See all reviews <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg></a>
+  </section>
+
+  <!-- Team -->
+  <section id="team" class="mx-auto mt-24 max-w-[1200px]">
+    <div class="px-4">
+      <h2 class="h-display max-w-[320px] text-[40px] leading-[1.1] sm:max-w-[560px] lg:text-[52px]">The people who work on your search</h2>
+      <p class="mt-6 max-w-[600px] text-[16px] leading-[1.7] text-[var(--ink)]">Before the first note goes out, each of them learns your thesis, your buy box and how you write.<br>This is the team on your account.</p>
+    </div>
+    <div id="teamTrack" class="hscroll mt-11 flex gap-4 overflow-x-auto scroll-px-4 px-4">
+      <article class="flex w-[260px] shrink-0 flex-col rounded-lg border border-[var(--line-soft)] bg-white p-8 shadow-soft">
+        <svg class="text-[var(--rind)]" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg>
+        <h3 class="mt-4 text-[18px] font-semibold text-[var(--ink)]">Search lead</h3>
+        <p class="mt-4 text-[16px] leading-[1.6] text-[var(--ink)]">Owns your search from buy box to monthly report, and tells you early when a thesis needs narrowing.</p>
+      </article>
+      <article class="flex w-[260px] shrink-0 flex-col rounded-lg border border-[var(--line-soft)] bg-white p-8 shadow-soft">
+        <svg class="text-[var(--rind)]" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <h3 class="mt-4 text-[18px] font-semibold text-[var(--ink)]">Research analyst</h3>
+        <p class="mt-4 text-[16px] leading-[1.6] text-[var(--ink)]">Builds your company list from registries and websites, and checks each one against your criteria.</p>
+        <a href="#contact" class="link-rind mt-auto inline-flex items-center gap-2 pt-5 text-[16px]">Learn more <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg></a>
+      </article>
+      <article class="flex w-[260px] shrink-0 flex-col rounded-lg border border-[var(--line-soft)] bg-white p-8 shadow-soft">
+        <svg class="text-[var(--rind)]" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="7" r="4"/><path d="M2 21v-2a4 4 0 0 1 4-4h4.5"/><circle cx="17" cy="17" r="3"/><path d="m21 21-1.9-1.9"/></svg>
+        <h3 class="mt-4 text-[18px] font-semibold text-[var(--ink)]">Owner researcher</h3>
+        <p class="mt-4 text-[16px] leading-[1.6] text-[var(--ink)]">Finds the person who owns each company, and notes tenure, age and any sign of succession planning.</p>
+        <a href="#contact" class="link-rind mt-auto inline-flex items-center gap-2 pt-5 text-[16px]">Learn more <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg></a>
+      </article>
+      <article class="flex w-[260px] shrink-0 flex-col rounded-lg border border-[var(--line-soft)] bg-white p-8 shadow-soft">
+        <svg class="text-[var(--rind)]" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+        <h3 class="mt-4 text-[18px] font-semibold text-[var(--ink)]">Writer</h3>
+        <p class="mt-4 text-[16px] leading-[1.6] text-[var(--ink)]">Writes each note in your voice, short and plain, the way one owner would write to another.</p>
+        <a href="#contact" class="link-rind mt-auto inline-flex items-center gap-2 pt-5 text-[16px]">Learn more <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg></a>
+      </article>
+      <article class="flex w-[260px] shrink-0 flex-col rounded-lg border border-[var(--line-soft)] bg-white p-8 shadow-soft">
+        <svg class="text-[var(--rind)]" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 8 8 5 8-5"/></svg>
+        <h3 class="mt-4 text-[18px] font-semibold text-[var(--ink)]">Deliverability specialist</h3>
+        <p class="mt-4 text-[16px] leading-[1.6] text-[var(--ink)]">Sets up and watches your sending inboxes so notes land in the owner’s inbox, not in spam.</p>
+        <a href="#contact" class="link-rind mt-auto inline-flex items-center gap-2 pt-5 text-[16px]">Learn more <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg></a>
+      </article>
+      <div class="w-px shrink-0" aria-hidden="true"></div>
+    </div>
+    <div class="mx-4 mt-6 h-2 overflow-hidden rounded bg-[var(--line-soft)]" aria-hidden="true"><div id="teamBar" class="h-full w-1/3 origin-left rounded bg-[var(--line)]" style="transform: translateX(0)"></div></div>
+  </section>
+
+  <!-- CTA -->
+  <section id="contact" class="relative mx-auto mt-16 max-w-[1200px] px-4">
+    <img src="brand_assets/lead-pomelo-mark.svg" alt="" aria-hidden="true" class="mx-auto block h-[66px] w-[66px] translate-x-[96px]">
+    <div class="mx-auto max-w-[640px] px-8 pb-24 pt-12">
+      <h2 class="h-display text-[32px] leading-[1.25] lg:text-[44px] lg:leading-[1.15]">Tell us your buy box</h2>
+      <p class="mt-6 text-[16px] leading-[1.75] text-[var(--ink)]">In 30 minutes we’ll count the companies that fit your thesis, estimate how many owners are 60 or older, and tell you how many conversations a month is realistic for your market.</p>
+      <a href="#" class="btn-primary shadow-rind mt-9 flex h-12 items-center justify-between rounded-lg px-5 text-[17px]">
+        Book a buy box call
+        <svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
+      </a>
+    </div>
+  </section>
+</main>
+
+<!-- Footer -->
+<footer class="mx-auto max-w-[1200px] px-4">
+  <div class="rounded-t-lg bg-[var(--rind)] px-6 pb-6 pt-6 text-[var(--pith)]">
+    <div class="overflow-hidden rounded-lg border border-[#3A6352] bg-[#1A4131]">
+      <div class="flex items-center justify-between gap-3 py-4 pl-4 pr-3">
+        <a href="#" class="foot-link block" aria-label="Lead Pomelo home">
+          <img src="brand_assets/lead-pomelo-logo-reversed.svg" alt="Lead Pomelo" class="block h-8 w-auto">
+        </a>
+        <div class="space-y-1 pr-1 text-right text-[13px] font-medium">
+          <a class="foot-link block" href="tel:+15550100200">+1 555-010-0200</a>
+          <a class="foot-link block" href="mailto:hello@example.com">hello@example.com</a>
+          <a class="foot-link block" href="mailto:press@example.com">press@example.com</a>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 border-t border-[#3A6352]">
+        <div class="grid place-items-center border-r border-[#3A6352] px-3 py-5"><img src="https://placehold.co/110x48/1A4131/A7B4AA?text=Partner" alt="Partner badge placeholder" class="h-12"></div>
+        <div class="grid place-items-center px-3 py-5"><img src="https://placehold.co/110x48/1A4131/A7B4AA?text=Partner" alt="Partner badge placeholder" class="h-12"></div>
+      </div>
+    </div>
+
+    <nav class="mt-12 px-2 pb-6" aria-label="Footer">
+      <a href="#team" class="foot-link serif inline-flex items-center gap-5 text-[26px]">Meet the team <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg></a>
+      <ul class="mt-4 space-y-3.5 text-[14px] font-medium text-[#C9D2C4]">
+        <li><a class="foot-link" href="#team">Search lead</a></li>
+        <li><a class="foot-link" href="#team">Research analyst</a></li>
+        <li><a class="foot-link" href="#team">Owner researcher</a></li>
+        <li><a class="foot-link" href="#team">Writer</a></li>
+        <li><a class="foot-link" href="#team">Deliverability specialist</a></li>
+      </ul>
+      <a href="#" class="foot-link serif mt-5 flex items-center gap-4 text-[26px]">Industries <span class="mono grid h-[22px] min-w-[22px] place-items-center rounded bg-[var(--pith)] px-1 text-[11px] text-[var(--rind)]">12</span><svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg></a>
+      <a href="#services" class="foot-link serif mt-5 flex items-center gap-4 text-[26px]">How it works <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg></a>
+      <a href="#" class="foot-link serif mt-5 flex items-center gap-4 text-[26px]">Resources <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg></a>
+      <p class="mt-10 text-[12px] text-[#A7B4AA]">© 2026 Lead Pomelo. All rights reserved.</p>
+    </nav>
+  </div>
+</footer>
+
+<!-- Floating chat -->
+<a href="#contact" aria-label="Message us" class="btn-primary shadow-rind fixed bottom-5 right-4 z-30 grid h-14 w-14 place-items-center rounded-lg">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M8 7V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-1"/><path d="M3 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H8l-4 3v-3.2A2 2 0 0 1 3 16Z"/></svg>
+</a>
+
+<script>
+  // Mobile menu
+  const menuBtn = document.getElementById('menuBtn'), menu = document.getElementById('menu');
+  menuBtn.addEventListener('click', () => {
+    const open = menu.dataset.open !== 'true';
+    menu.dataset.open = open; menuBtn.setAttribute('aria-expanded', open);
+  });
+  menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { menu.dataset.open = 'false'; menuBtn.setAttribute('aria-expanded', 'false'); }));
+
+  // Accordion: one open at a time
+  const accs = [...document.querySelectorAll('details.acc')];
+  accs.forEach(d => d.addEventListener('toggle', () => {
+    d.querySelector('.caret').style.color = d.open ? 'var(--rind)' : 'var(--ink)';
+    if (d.open) accs.forEach(o => { if (o !== d) o.open = false; });
+  }));
+
+  // Owner conversation estimate
+  const $ = id => document.getElementById(id);
+  const num = el => Number(String(el.value).replace(/[^\d.]/g, '')) || 0;
+  const fmtMoney = v => v >= 1e6 ? '$' + (v / 1e6).toFixed(1) + 'M' : '$' + Math.round(v).toLocaleString('en-US');
+  function calc() {
+    const costPerConv = Number($('industry').value);
+    const companies = Number($('companies').value);
+    const months = Number($('months').value);
+    const rate = Number($('rate').value) / 100, budget = num($('budget'));
+    const spend = budget * months;
+    const conv = Math.min(Math.round(spend / costPerConv), Math.round(companies * 0.10));
+    $('oConv').textContent = conv.toLocaleString();
+    $('oMonth').textContent = (conv / months).toFixed(1);
+    $('oLoi').textContent = Math.round(conv * rate).toLocaleString();
+    $('oCost').textContent = conv ? fmtMoney(spend / conv) : '—';
+    $('rateOut').textContent = $('rate').value + ' %';
+    $('rate').style.setProperty('--p', (($('rate').value - 1) / 29 * 100) + '%');
+  }
+  ['industry', 'companies', 'months', 'rate'].forEach(id => $(id).addEventListener('input', calc));
+  $('budget').addEventListener('input', calc);
+  $('budget').addEventListener('blur', e => { const n = num(e.target); e.target.value = n ? n.toLocaleString('en-US') : ''; });
+  calc();
+
+  // Case study carousel
+  const track = $('caseTrack'), prev = $('casePrev'), next = $('caseNext');
+  const step = () => track.querySelector('article').offsetWidth + 24;
+  prev.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
+  next.addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
+  const syncBtns = () => {
+    const max = track.scrollWidth - track.clientWidth - 2;
+    prev.disabled = track.scrollLeft <= 2; next.disabled = track.scrollLeft >= max;
+    prev.style.background = prev.disabled ? 'var(--line-soft)' : 'var(--panel)';
+    next.style.background = next.disabled ? 'var(--line-soft)' : 'var(--panel)';
+    prev.style.color = prev.disabled ? 'var(--ink-muted)' : 'var(--ink)';
+    next.style.color = next.disabled ? 'var(--ink-muted)' : 'var(--ink)';
+  };
+  track.addEventListener('scroll', syncBtns, { passive: true }); addEventListener('resize', syncBtns); syncBtns();
+
+  // Team scroll progress
+  const tt = $('teamTrack'), bar = $('teamBar');
+  const syncBar = () => {
+    const ratio = tt.clientWidth / tt.scrollWidth;
+    bar.style.width = (ratio * 100) + '%';
+    const max = tt.scrollWidth - tt.clientWidth;
+    const p = max ? tt.scrollLeft / max : 0;
+    bar.style.transform = `translateX(${p * (1 / ratio - 1) * 100}%)`;
+  };
+  tt.addEventListener('scroll', syncBar, { passive: true }); addEventListener('resize', syncBar); syncBar();
+</script>
+</body>
+</html>

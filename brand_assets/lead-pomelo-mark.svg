@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Lead Pomelo">
+<title>Lead Pomelo</title>
+<circle cx="32" cy="32" r="30" fill="#1F4A38"/>
+<circle cx="32" cy="32" r="25.8" fill="#EEF1D8"/>
+<path fill="#F3B3B0" d="M33.35 28.74L33.35 9.24A22.8 22.8 0 0 1 47.14 14.95Z"/>
+<path fill="#B83A51" d="M35.26 30.65L49.05 16.86A22.8 22.8 0 0 1 54.76 30.65Z"/>
+<path fill="#F3B3B0" d="M35.26 33.35L54.76 33.35A22.8 22.8 0 0 1 49.05 47.14Z"/>
+<path fill="#F3B3B0" d="M33.35 35.26L47.14 49.05A22.8 22.8 0 0 1 33.35 54.76Z"/>
+<path fill="#F3B3B0" d="M30.65 35.26L30.65 54.76A22.8 22.8 0 0 1 16.86 49.05Z"/>
+<path fill="#F3B3B0" d="M28.74 33.35L14.95 47.14A22.8 22.8 0 0 1 9.24 33.35Z"/>
+<path fill="#F3B3B0" d="M28.74 30.65L9.24 30.65A22.8 22.8 0 0 1 14.95 16.86Z"/>
+<path fill="#F3B3B0" d="M30.65 28.74L16.86 14.95A22.8 22.8 0 0 1 30.65 9.24Z"/>
+</svg>

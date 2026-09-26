@@ -1,0 +1,6 @@
+node_modules/
+temporary screenshots/
+.claude/
+.DS_Store
+belkins.io.png
+CLAUDE.md
